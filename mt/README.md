@@ -55,6 +55,7 @@ Here are some examples (feel free to click on the links to see the result for yo
 
 ### Models
 In the above examples, we have selected the `domain` to be `general-fast`. However, our API allows you to use various other models that may trade speed for quality. Below is a summary of all the models supported by our API.
+
 | Translation Direction        | Domain           |  Speed <sup>1</sup> |  Notes |
 | :--------------------------: |:---------------: | :---------:  | :---------|
 | Arabic → English             | `general-fast`   |  24 tokens/s | This model has been pruned to give faster performance in real-time scenarios. The quality of the translation is lower as a tradeoff. Words unknown to the model are transliterated in the output. |
