@@ -2,7 +2,6 @@
 
 The Arabic ASR is hosted on Azure. It supports both streaming websocket API and a HTTP API.
 
-
 ## Streaming WebSocket API
 
 ###URI:
@@ -16,7 +15,6 @@ Chrome and other browser has enforced to use secured connection. You still can u
 To open a session, connect to the specified server websocket address. The server assumes by default that incoming audio is sent using 16 kHz, mono, 16bit little-endian format. This can be overriden using the 'content-type' request parameter. The content type has to be specified using GStreamer 1.0 caps format, e.g. to send 44100 Hz mono 16-bit data, use: "audio/x-raw, layout=(string)interleaved, rate=(int)44100, format=(string)S16LE, channels=(int)1". This needs to be url-encoded of course, so the actual request is something like:
 
 URI?content-type=audio/x-raw,+layout=(string)interleaved,+rate=(int)44100,+format=(string)S16LE,+channels=(int)1
-Audio can also be encoded using any codec recognized by GStreamer (assuming the needed packages are installed on the server). GStreamer should recognize the container and codec automatically from the stream, you don't have to specify the content type. E.g., to send audio encoded using the Speex codec in an Ogg container, use the following URL to open the session (server should automatically recognize the codec):
 
 ###Sending Audio:
 Speech should be sent to the server in raw blocks of data, using the encoding specified when session was opened. It is recommended that a new block is sent at least 4 times per second (less frequent blocks would increase the recognition lag). Blocks do not have to be of equal size.
@@ -51,10 +49,12 @@ Examples of server responses:
 	{"status": 0, "result": {"hypotheses": [{"transcript": "see on teine lause."}], "final": true}}
 Server segments incoming audio on the fly. For each segment, many non-final hypotheses, followed by one final hypothesis are sent. Non-final hypotheses are used to present partial recognition hypotheses to the client. A sequence of non-final hypotheses is always followed by a final hypothesis for that segment. After sending a final hypothesis for a segment, server starts decoding the next segment, or closes the connection, if all audio sent by the client has been processed.
 
+### Example:
+
 
 ## HTTP API
 
-###URI:
+### URI:
  	http://qcri-alt-asr-ar.northeurope.cloudapp.azure.com:8888/client/dynamic/recognize
 
 One can also use the server through a very simple HTTP-based API. This allows to simply send audio via a PUT or POST request to http://server:port/client/dynamic/recognize and read the JSON ouput. Note that the JSON output is differently structured than the output of the websocket-based API. This interface is compatible to the one implemented by http://github.com/alumae/ruby-pocketsphinx-server.
@@ -76,9 +76,25 @@ Output (like before):
 
 	{"status": 0, "hypotheses": [{"utterance": "one two or three you fall five six seven eight. yeah."}], "id": "4e4594ee-bdb2-401f-8114-41a541d89eb8"}
 
+### Example:
 
+```python
+import requests
 
+def main():
+  import argparse
 
+  parser = argparse.ArgumentParser('http request example')
+  parser.add_argument('-u', '--uri', default='http://qcri-alt-asr-ar.northeurope.cloudapp.azure.com:8888/client/dynamic/recognize', help='server url')
+  parser.add_argument('wav', help='wav file')
+  args = parser.parse_args()
 
+  f = open(args.wav, 'rb')
+  files = {'file': (f.name, f, 'audio/x-wav')}
 
-_yzhang at hbku.edu.qa_
+  r = requests.post(args.uri, files=files)
+  print r.json()
+
+if __name__ == '__main__':
+  main()
+  ```
