@@ -51,6 +51,7 @@ Server segments incoming audio on the fly. For each segment, many non-final hypo
 
 ### Example:
 
+cmuqhack2017/asr/examples/ws-example.py
 
 ## HTTP API
 
