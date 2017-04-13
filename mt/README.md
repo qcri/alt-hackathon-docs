@@ -12,7 +12,7 @@ A simple call will enable you to get translations. The format of the API call (G
 
 - `langpair`: This is `ar-en` or `en-ar` depending on the direction of translation
 - `domain`: Use `general-fast` for generic translations. For other models, see `Models` section below.
-- `key`: This is the API key that you will need to use for translation. We have created an account for your already, use the following value for this parameter: `73878214d6fafe7fdcdff7408749ae21`
+- `key`: This is the API key that you will need to use for translation. We have created an account for your already, use the following value for this parameter: `961b266de01f6cca1f73b2547658a309`
 - `text`: The text you need to translate. All of the text **must** be [URI Encoded](http://www.w3schools.com/tags/ref_urlencode.asp). See examples section for further explanation.
 
 Once the API call has been made, you will get back one of the following two responses:
@@ -39,19 +39,19 @@ Always check the `success` parameter of the result first to ensure the translati
 ### Examples
 Here are some examples (feel free to click on the links to see the result for yourself)
 
-- [Example 1: Arabic to English translation](https://mt.qcri.org/api/v1/translate?langpair=ar-en&domain=general-fast&key=73878214d6fafe7fdcdff7408749ae21&text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7)
-	- ``` https://mt.qcri.org/api/v1/translate?langpair=ar-en&domain=general-fast&key=73878214d6fafe7fdcdff7408749ae21&text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7```
+- [Example 1: Arabic to English translation](https://mt.qcri.org/api/v1/translate?langpair=ar-en&domain=general-fast&key=961b266de01f6cca1f73b2547658a309&text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7)
+	- ``` https://mt.qcri.org/api/v1/translate?langpair=ar-en&domain=general-fast&key=961b266de01f6cca1f73b2547658a309&text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7```
     - Here we translate `مرحبا` from Arabic to English
     - Note how the text is URI encoded, i.e. `مرحبا` → `%D9%85%D8%B1%D8%AD%D8%A8%D8%A7`
 
-- [Example 2: English to Arabic translation](https://mt.qcri.org/api/v1/translate?langpair=en-ar&domain=general-fast&key=73878214d6fafe7fdcdff7408749ae21&text=Welcome%20team%21)
-	- ``` https://mt.qcri.org/api/v1/translate?langpair=en-ar&domain=general-fast&key=73878214d6fafe7fdcdff7408749ae21&text=Welcome+team%21```
+- [Example 2: English to Arabic translation](https://mt.qcri.org/api/v1/translate?langpair=en-ar&domain=general-fast&key=961b266de01f6cca1f73b2547658a309&text=Welcome%20team%21)
+	- ``` https://mt.qcri.org/api/v1/translate?langpair=en-ar&domain=general-fast&key=961b266de01f6cca1f73b2547658a309&text=Welcome+team%21```
 	- Here we translate `Welcome team!` from English to Arabic
 	- Note that the text is URI encoded here, the english letters remain the same since the encoding of an English letter is the letter itself. However, the space and the exclamation mark have been encoded differently.
 - Erroneous Examples
-	- [Missing text](https://mt.qcri.org/api/v1/translate?langpair=en-ar&domain=general-fast&key=73878214d6fafe7fdcdff7408749ae21): `https://mt.qcri.org/api/v1/translate?langpair=en-ar&domain=general-fast&key=73878214d6fafe7fdcdff7408749ae21`
+	- [Missing text](https://mt.qcri.org/api/v1/translate?langpair=en-ar&domain=general-fast&key=961b266de01f6cca1f73b2547658a309): `https://mt.qcri.org/api/v1/translate?langpair=en-ar&domain=general-fast&key=961b266de01f6cca1f73b2547658a309`
 	- [Missing key](https://mt.qcri.org/api/v1/translate?langpair=en-ar&domain=general-fast): `https://mt.qcri.org/api/v1/translate?langpair=en-ar&domain=general-fast`
-	- [Invalid Model](https://mt.qcri.org/api/v1/translate?langpair=en-ar&domain=test-model&key=73878214d6fafe7fdcdff7408749ae21&text=Welcome+team%21): `https://mt.qcri.org/api/v1/translate?langpair=en-ar&domain=test-model&key=73878214d6fafe7fdcdff7408749ae21&text=Welcome+team%21`
+	- [Invalid Model](https://mt.qcri.org/api/v1/translate?langpair=en-ar&domain=test-model&key=961b266de01f6cca1f73b2547658a309&text=Welcome+team%21): `https://mt.qcri.org/api/v1/translate?langpair=en-ar&domain=test-model&key=961b266de01f6cca1f73b2547658a309&text=Welcome+team%21`
 
 ### Models
 In the above examples, we have selected the `domain` to be `general-fast`. However, our API allows you to use various other models that may trade speed for quality. Below is a summary of all the models supported by our API.
@@ -60,8 +60,11 @@ In the above examples, we have selected the `domain` to be `general-fast`. Howev
 | :--------------------------: |:---------------: | :---------:  | :---------|
 | Arabic → English             | `general-fast`   |  24 tokens/s | This model has been pruned to give faster performance in real-time scenarios. The quality of the translation is lower as a tradeoff. Words unknown to the model are transliterated in the output. |
 | Arabic → English             | `general-neural` |  10 tokens/s | This model is built using a deep neural network framework. It is currently in beta phase, but gives very fluent outputs. If the model does not know the meaning of certain words, it will try to guess or implictly ignore the word to make the output fluent. |
+| Arabic → English             | `general-neural-large` |  7 tokens/s | Similar to `general-neural`, but is finetuned for news and a bit slower. This model is particular adept at handling longer sentences |
 | Arabic → English             | `general`        |  10 tokens/s | This model is a heavy traditional model - and its quality is higher than the `general-fast` model. Words unknown to the model are transliterated in the output. |
-| English → Arabic          | `general-fast`        |  15 tokens/s | This is a also a general model. It is also currently in beta phase. |
+| English → Arabic          | `general-fast`        |  15 tokens/s | This is a also a general model. It is currently in beta phase. |
+| English → Arabic          | `neural-opus-dev`        |  7 tokens/s | Beta model trained using a deep neural network framework. This model is also more fluent in its output |
+
 
 <sup>1</sup> These are average translation speeds, which will vary depending on the server load, network conditions etc. Use these numbers as a ballpark when selecting a model for translation.
 
