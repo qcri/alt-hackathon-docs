@@ -4,26 +4,26 @@ The Arabic ASR is hosted on Azure. It supports both streaming websocket API and 
 
 ## Streaming WebSocket API
 
-###URI:
+### URI:
 	ws://qcri-alt-asr-ar.northeurope.cloudapp.azure.com:8888/client/ws/speech
 	wss://qcri-alt-asr-ar.northeurope.cloudapp.azure.com:8889/client/ws/speech
 Chrome and other browser has enforced to use secured connection. You still can use `ws://` in app or scripts. But for websites, you will need to use `wss://`.
 
 
-###Opening a session:
+### Opening a session:
 
 To open a session, connect to the specified server websocket address. The server assumes by default that incoming audio is sent using 16 kHz, mono, 16bit little-endian format. This can be overriden using the 'content-type' request parameter. The content type has to be specified using GStreamer 1.0 caps format, e.g. to send 44100 Hz mono 16-bit data, use: "audio/x-raw, layout=(string)interleaved, rate=(int)44100, format=(string)S16LE, channels=(int)1". This needs to be url-encoded of course, so the actual request is something like:
 
 URI?content-type=audio/x-raw,+layout=(string)interleaved,+rate=(int)44100,+format=(string)S16LE,+channels=(int)1
 
-###Sending Audio:
+### Sending Audio:
 Speech should be sent to the server in raw blocks of data, using the encoding specified when session was opened. It is recommended that a new block is sent at least 4 times per second (less frequent blocks would increase the recognition lag). Blocks do not have to be of equal size.
 
 After the last block of speech data, a special 3-byte ANSI-encoded string "EOS" ("end-of-stream") needs to be sent to the server. This tells the server that no more speech is coming and the recognition can be finalized.
 
 After sending "EOS", client has to keep the websocket open to receive recognition results from the server. Server closes the connection itself when all recognition results have been sent to the client. No more audio can be sent via the same websocket after an "EOS" has been sent. In order to process a new audio stream, a new websocket connection has to be created by the client.
 
-###Reading Results:
+### Reading Results:
 
 Server sends recognition results and other information to the client using the JSON format. The response can contain the following fields:
 
