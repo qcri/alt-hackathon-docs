@@ -84,21 +84,22 @@
 		// Initializes audioContext
 		// Can be called multiple times.
 		// TODO: call something on success (MSG_INIT_RECORDER is currently called)
-		this.init = function() {
+		this.init = async function() {
 			config.onEvent(MSG_WAITING_MICROPHONE, "Waiting for approval to access your microphone ...");
 			try {
 				window.AudioContext = window.AudioContext || window.webkitAudioContext;
-				navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+				navigator.getUserMedia = navigator.mediaDevices.getUserMedia
 				window.URL = window.URL || window.webkitURL;
 				audioContext = new AudioContext();
 			} catch (e) {
 				// Firefox 24: TypeError: AudioContext is not a constructor
 				// Set media.webaudio.enabled = true (in about:config) to fix this.
 				config.onError(ERR_CLIENT, "Error initializing Web Audio browser: " + e, 0);
+				console.log(e)
 			}
 
 			if (navigator.getUserMedia) {
-				navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
+				navigator.mediaDevices.getUserMedia({audio: true}).then(startUserMedia).catch(function(e) {
 					if (e.message.indexOf("Only secure origins") == -1) {
 						config.onError(ERR_CLIENT, "No live audio input in this browser: " + e.message, 0);
 					} else {
